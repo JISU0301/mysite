@@ -6,6 +6,7 @@
 		<typeAlias type="kr.co.itcen.mysite.vo.UserVo" alias="uservo"/>  
 		<typeAlias type="kr.co.itcen.mysite.vo.GuestbookVo" alias="guestbookvo"/>  
 		<typeAlias type="kr.co.itcen.mysite.vo.BoardVo" alias="boardvo"/>  
+		<typeAlias type="kr.co.itcen.mysite.search.Search" alias="search"/>
 		<!-- alias는 소문자로 쓰세용 그게 관례 ^ -->
 	</typeAliases>
 

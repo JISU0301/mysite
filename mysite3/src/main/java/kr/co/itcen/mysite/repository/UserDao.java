@@ -3,7 +3,6 @@ package kr.co.itcen.mysite.repository;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,13 @@ public class UserDao {
 		return result; 
 	}
 	
+	
+	public UserVo get(String email) {
+		UserVo result = sqlSession.selectOne("user.getByEmail", email);
+		return result;		
+	}
+	
+	
 	public UserVo get(String email, String password) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("email", email);
@@ -46,4 +52,6 @@ public class UserDao {
 		int count = sqlSession.update("user.update", vo);
 		return count == 1;
 	}
+
+
 }
