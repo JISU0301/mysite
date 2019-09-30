@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +21,7 @@
 					<input type="password" name="password">
 					<input type="submit" value="확인">
 				</form>
-				<a href="${pageContext.servletContext.contextPath }/guestbook">방명록 리스트</a>
+				<a href="${pageContext.servletContext.contextPath }/guestbook/list">방명록 리스트</a>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>

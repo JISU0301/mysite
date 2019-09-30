@@ -63,8 +63,8 @@ public class BoardDao {
 		return count == 1;
 	}
 
-	public Boolean boardDelete(Long no) {
-		int count = sqlSession.update("board.delete", no);
+	public Boolean boardDelete(BoardVo boardVo) {
+		int count = sqlSession.update("board.delete", boardVo);
 		return count == 1;
 	}
 }

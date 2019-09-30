@@ -77,8 +77,8 @@ public class BoardService {
 		boardDao.boardUpdate(boardVo);
 	}
 
-	public void delete(Long no) {
-		boardDao.boardDelete(no);
+	public void delete(BoardVo vo) {
+		boardDao.boardDelete(vo);
 	}
 	
 	

@@ -33,7 +33,7 @@
 			<c:forEach items='${list }' var='boardVo' varStatus='status'>
                <tr>
                   <td>${count - status.index }</td>
-                  <td style ='padding-left:${50*boardVo.depth }px'>
+                  <td style ='padding-left:${20*boardVo.depth }px'>
                   <c:if test="${boardVo.depth >= 1 }">
                   	<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'/>
                   </c:if>

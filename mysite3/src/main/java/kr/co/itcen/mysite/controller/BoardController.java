@@ -29,19 +29,12 @@ public class BoardController {
 	@Autowired
 	private UserService userService;
 	
-//	@RequestMapping(value = {"", "/list"}, method = RequestMethod.POST)
-//	public String getList(@RequestParam(value="kwd", required = false,defaultValue = "") String kwd) {
-//		
-//		return "redirect:/board?kwd="+kwd;
-//	}
-	
+
 	@RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
 	public String getList(Search search, Model model) {
 		if(search.getPage() < 1) {
 			search.setPage(1);
 		}
-		System.out.println(search.getKwd());
-		System.out.println(search.getPage());
 		if(search.getKwd() == null || search.getKwd().length() == 0) {
 			search.setKwd("");
 		}
@@ -54,70 +47,71 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	@RequestMapping(value = ("/write"), method = RequestMethod.GET)
-	public String write(HttpSession session, Model model) {
-		// 접근 제어(ACL)
-		if (session == null) {
-			return "redirect:/";
-		}
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		UserVo userVo = userService.getUser(authUser.getNo());
-		model.addAttribute("userVo", userVo);
-		return "board/write";
+	
+	@RequestMapping(value="/write",method=RequestMethod.GET)
+	public String write(HttpSession session) {
+		if(session != null && session.getAttribute("authUser") !=null)
+			return "/board/write";
+		return "redirect:/board";
 	}
 	
-	@RequestMapping(value = ("/write{no}"), method = RequestMethod.POST)
-	public String write(@ModelAttribute BoardVo vo, @PathVariable("no") Long no, HttpSession session, Model model) {
-		// 접근 제어(ACL)
-		if (session == null) {
-			return "redirect:/";
-		}
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		System.out.println("no : " +no);
-		System.out.println("no2 : " +vo.getNo());
-		UserVo userVo = userService.getUser(authUser.getNo());
-		model.addAttribute("userVo", userVo);
-		
-		System.out.println("GETNo" + vo.getNo());
-		if(no == null) {
-			no = vo.getNo();
-		}
-		
-		BoardVo boardVo = new BoardVo();
-		boardVo.setTitle(vo.getTitle());
-		boardVo.setContents(vo.getContents());
-		boardVo.setOrderNo(1);
-		boardVo.setDepth(0);
-		boardVo.setUserNo(authUser.getNo());
-		
-		if(no == null) {
-			boardService.insert(boardVo);
-		} else {
-			boardVo.setNo(no);
-			BoardVo selectBVo = boardService.select(no);
+	@RequestMapping(value="/write",method=RequestMethod.POST)
+	public String write(@ModelAttribute BoardVo vo,HttpSession session) {
+		UserVo authUser=(UserVo)session.getAttribute("authUser");
+		vo.setUserNo(authUser.getNo());
+		if(vo.getGroupNo() == null || vo.getOrderNo()==null || vo.getDepth() == null){
+			boardService.insert(vo);
 			
-			Integer groupNo = selectBVo.getGroupNo();
-			System.out.println(groupNo);
-			Integer orderNo = selectBVo.getOrderNo()+1;
-			System.out.println(orderNo);
-			Integer depth = selectBVo.getDepth()+1;
-			System.out.println(depth);
-			
-			boardVo.setGroupNo(groupNo);
-			boardVo.setOrderNo(orderNo);
-			boardVo.setDepth(depth);
-			boardService.update(groupNo, orderNo);
-			boardService.insertBoard(boardVo);
+		}else {
+			boardService.boardUpdate(vo);
+			boardService.insert(vo);
 		}
-		
-		return "redirect:/board/list";
+		return "redirect:/board";
 	}
+		
+	
+	
+	
+	/*
+	 * @RequestMapping(value = "/write/{no}", method = RequestMethod.POST) public
+	 * String write(@ModelAttribute BoardVo vo, @PathVariable("no") Long no,
+	 * 
+	 * @RequestParam("title") String title, @RequestParam("contents") String
+	 * contents, HttpSession session, Model model){ // 접근 제어(ACL) if (session ==
+	 * null) { return "user/login"; } UserVo authUser = (UserVo)
+	 * session.getAttribute("authUser"); if(authUser == null) { return "user/login";
+	 * }
+	 * 
+	 * UserVo userVo = userService.getUser(authUser.getNo());
+	 * model.addAttribute("userVo", userVo);
+	 * 
+	 * if(no == null) { no = vo.getNo(); }
+	 * 
+	 * BoardVo boardVo = new BoardVo(); boardVo.setTitle(title);
+	 * boardVo.setContents(contents); boardVo.setOrderNo(1); boardVo.setDepth(0);
+	 * boardVo.setUserNo(authUser.getNo());
+	 * 
+	 * if(no == null) { //boardService.insert(boardVo); } else { boardVo.setNo(no);
+	 * BoardVo selectBVo = boardService.select(no);
+	 * 
+	 * Integer groupNo = selectBVo.getGroupNo(); Integer orderNo =
+	 * selectBVo.getOrderNo()+1; Integer depth = selectBVo.getDepth()+1;
+	 * 
+	 * boardVo.setGroupNo(groupNo); boardVo.setOrderNo(orderNo);
+	 * boardVo.setDepth(depth); boardService.update(groupNo, orderNo);
+	 * boardService.insertBoard(boardVo); }
+	 * 
+	 * return "redirect:/board"; }
+	 * 
+	 * @RequestMapping(value = ("/write/{no}"), method = RequestMethod.GET) public
+	 * String write(@ModelAttribute BoardVo vo, @PathVariable("no") Long no,
+	 * HttpSession session, Model model) { // 접근 제어(ACL) if (session == null) {
+	 * return "user/login"; } UserVo authUser = (UserVo)
+	 * session.getAttribute("authUser"); if(authUser == null) { return "user/login";
+	 * }
+	 * 
+	 * model.addAttribute("no", no); return "/board/write"; }
+	 */
 	
 	@RequestMapping(value = ("/view/{no}"), method = RequestMethod.GET)
 	public String view(@PathVariable("no") Long no, HttpSession session, Model model) {
@@ -168,43 +162,16 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = ("/delete/{no}"), method = RequestMethod.GET)
-	public String delete(@PathVariable("no") Long no, HttpSession session, Model model ) {
-		if (session == null) {
-			return "redirect:/board/list";
-		}
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/board/list";
-		}
-		
-		BoardVo boardVo = boardService.getView(no);
-		
-		model.addAttribute("boardVo", boardVo);
-		
+	public String delete(@PathVariable("no") Long no, Model model) {
+		model.addAttribute("no", no);
 		return "board/delete";
 	}
 	
 	@RequestMapping(value = ("/delete"), method = RequestMethod.POST)
 	public String delete(@ModelAttribute BoardVo vo, @RequestParam("text") String text, HttpSession session) {
-		if (session == null) {
-			return "redirect:/board/list";
-		}
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/board/list";
-		}
-		
-		if (authUser.getNo() != vo.getNo()) {
-			return "redirect:/board/list";
-		}
-		
-		if ("삭제하기".equals(text)) {
-			boardService.delete(vo.getNo());
-		}
-		
-		return "redirect:/board/list";
+		boardService.delete(vo);
+		return "redirect:/guestbook";
 	}
-	
 	
 	
 }

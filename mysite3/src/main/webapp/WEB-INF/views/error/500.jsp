@@ -7,11 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Oooops~~~</h1>
+	<h1>Ooops~~~</h1>
 	<p>
 		죄송합니다.<br>
 		현재 서비스 요청이 많아서 서비스가 지연되고 있습니다.<br>
-		잠시후, 다시 이용해주세요.<br>
-		</p>
+		잠시 후, 다시 시도해 주세요.
+	</p>
 </body>
 </html>
