@@ -31,17 +31,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		//4. @Auth가 없으면 class type에 있을 수 있으므로
 			if(auth == null) {
-				auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
 				//과제 : class type 에서 @Auth가 있는지를 확인해 봐야한다
-				if(auth == null) {
-					return true;
-				}
-			}
+				auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
+			
 		//5. @Auth가 없으면 
 		if(auth == null) {
 			return true;
+			}
 		}
-		
+			
 		//6. @Auth가 class나 method에 붙어있기 때문에 인증 여부를 체크한다.
 		HttpSession session = request.getSession();
 		if(session == null || session.getAttribute("authUser") == null) {
