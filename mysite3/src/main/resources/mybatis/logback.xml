@@ -33,7 +33,7 @@
 		/log-mysite/exception.log 파일에만  출력하는 로거
 	-->
 	
-	<logger name="kr.co.itcen.mysite/exception"  level="debug" additivity="false">
+	<logger name="kr.co.itcen.mysite.exception"  level="debug" additivity="false">
             <appender-ref ref="fileAppender1" />
 			<appender-ref ref="consoleAppender" />
     </logger> 
