@@ -5,7 +5,10 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/applicationContext.xml</param-value>
   </context-param>
-  <listener>
+  <!-- 
+		<context-param> 하나더 설정해줘야한다
+   -->
+   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <filter>

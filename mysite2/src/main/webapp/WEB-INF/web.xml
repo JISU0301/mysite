@@ -9,10 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml</param-value>
-  </context-param>
+ 
   <listener>
     <listener-class>kr.co.itcen.web.listener.ContextLoadListener</listener-class>
   </listener>
