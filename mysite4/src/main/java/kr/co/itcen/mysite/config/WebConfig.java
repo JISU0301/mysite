@@ -15,4 +15,6 @@ import kr.co.itcen.config.web.SecurityConfig;
 @ComponentScan({"kr.co.itcen.mysite.controller"})
 @Import({MVCConfig.class, SecurityConfig.class, MessageConfig.class, FileuploadConfig.class})
 public class WebConfig {
+	
 }
+ 
