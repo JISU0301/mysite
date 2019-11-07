@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <style type="text/css">
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
 	float: none;
@@ -41,7 +42,9 @@
 }
 </style>
 <script>
+//
 // jquery plug-in
+//
 (function($){
 	$.fn.hello = function(){
 		console.log("hello #" + $(this).attr("id"));
@@ -66,7 +69,6 @@
 <script>
 var isEnd = false;
 var startNo = 0;
-
 var messageBox = function(title, message, callback){
 	$("#dialog-message p").text(message);
 	$("#dialog-message")
@@ -84,8 +86,16 @@ var messageBox = function(title, message, callback){
 		});	
 }
 
+var listItemTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs-templates/list-item-template.ejs"
+});
+
+var listTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs-templates/list-template.ejs"
+});
+
 var render = function(vo, mode){
-	// template library를 사용한다.(html rendering libary)
+	// template library를 사용한다.(html rendering engine libary)
 	// ejs, underscore, mustache
 	var html = 
 		"<li data-no='" + vo.no + "'>" +
@@ -154,10 +164,10 @@ $(function(){
 				console.log(password);
 				
 				$.ajax({
-					url: "${pageContext.request.contextPath }/api/guestbook/" + no + "?password="+password,
+					url: "${pageContext.request.contextPath }/api/guestbook/" + no,
 					type: "delete",
 					dataType: 'json',
-					data: "",
+					data: "password="+password,
 					success: function(response){
 						console.log(response);
 						if(response.result != "success"){
@@ -232,7 +242,8 @@ $(function(){
 				}
 				
 				// rendering
-				render(response.data);
+				var html = listItemTemplate.render(response.data);
+				$("#list-guestbook").prepend(html);
 				
 				// form reset		
 				$("#add-form")[0].reset();
