@@ -33,7 +33,7 @@ public class GuestbookController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addList(GuestbookVo vo) {
-		guestbookService.insertaddList(vo);
+		guestbookService.insert(vo);
 		return "redirect:/guestbook";
 	}
 	
@@ -49,7 +49,9 @@ public class GuestbookController {
 		return "redirect:/guestbook";
 	}
 	
-	
-	
+	@RequestMapping(value = "/spa", method = RequestMethod.GET)
+	public String spa() {
+		return "guestbook/index-spa";
+	}
 
 }
